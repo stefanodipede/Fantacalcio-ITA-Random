@@ -1,7 +1,5 @@
-#################################################
- Chiamata Random per asta Fantacalcio con opzioni   		
+ Chiamata Random per asta Fantacalcio con opzioni
  Ver. 1.0 - Stefano Di Pede -  2018-09-03
-#################################################
 
 Download il file aggiornato dei calciotori dal sito di rifertimento.
 Nel nostro caso: Fantagazzetta.
