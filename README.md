@@ -24,7 +24,7 @@ Es: P;PERIN;JUVENTUS;13;0
 
 
 
-* RUOLO = Il ruolo deve essere codificato da una lettera tra: P,D,C,A.
+\* RUOLO = Il ruolo deve essere codificato da una lettera tra: P,D,C,A.
 
 P = Portiere
  
@@ -58,6 +58,8 @@ Tale giocatore verrà inserito nel file csv relativo al giocatore che lo ha acqu
 
 Per modificare il nome dei giocatori e dei file, è possibile modificare le variabili iniziali dello script.
 
+
+In aggiunta al progetto, è stato inserito un file Excel: fantacalcio.xlsx, con i riferimenti ai csv delle squadre, con aggiornamento automatico dei dati da CSV, e calcolo automatico dei crediti rimanenti, con formattazione automatica in base ai ruoli.
 
 
 Buona Asta!
