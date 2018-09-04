@@ -14,12 +14,14 @@ OPTION="$1"
 DIRBACKUP="backup"
 DATA=$(date +%Y-%m-%d-%H:%M);
 DIRSQUADRE="squadre"
-PLAYER1="Alfredo";
-PLAYER2="Francesco";
-PLAYER3="Lorenzo";
-PLAYER4="Patrizio";
-PLAYER5="StefanoDP";
-PLAYER6="StefanoDezi";
+NPLAYER=6
+PLAYER[0]="Alfredo";
+PLAYER[1]="Francesco";
+PLAYER[2]="Lorenzo";
+PLAYER[3]="Patrizio";
+PLAYER[4]="StefanoDP";
+PLAYER[5]="StefanoDezi";
+
 
 function option {
 if [[ -v OPTION ]]; then
@@ -89,29 +91,29 @@ function inizio {
 	cp $LISTA $DIRBACKUP/$LISTA-backup-$DATA
 	sed -i -e "s/ \*//g" $LISTA
 	sed -i -e "s/'//g" $LISTA
-	if [ ! -f $DIRSQUADRE/$PLAYER1.csv ]; then
-		touch $DIRSQUADRE/$PLAYER1.csv
-		echo -e "Ruolo;Nome;Squadra;costo" > $DIRSQUADRE/$PLAYER1.csv
+	if [ ! -f $DIRSQUADRE/${PLAYER[0]}.csv ]; then
+		touch $DIRSQUADRE/${PLAYER[0]}.csv
+		echo -e "Ruolo;Nome;Squadra;costo" > $DIRSQUADRE/${PLAYER[0]}.csv
 	fi
-	if [ ! -f $DIRSQUADRE/$PLAYER2.csv ]; then
-		touch $DIRSQUADRE/$PLAYER2.csv
-		echo -e "Ruolo;Nome;Squadra;costo" > $DIRSQUADRE/$PLAYER2.csv
+	if [ ! -f $DIRSQUADRE/${PLAYER[1]}.csv ]; then
+		touch $DIRSQUADRE/${PLAYER[1]}.csv
+		echo -e "Ruolo;Nome;Squadra;costo" > $DIRSQUADRE/${PLAYER[1]}.csv
 	fi
-	if [ ! -f $DIRSQUADRE/$PLAYER3.csv ]; then
-		touch $DIRSQUADRE/$PLAYER3.csv
-		echo -e "Ruolo;Nome;Squadra;costo" > $DIRSQUADRE/$PLAYER3.csv
+	if [ ! -f $DIRSQUADRE/${PLAYER[2]}.csv ]; then
+		touch $DIRSQUADRE/${PLAYER[2]}.csv
+		echo -e "Ruolo;Nome;Squadra;costo" > $DIRSQUADRE/${PLAYER[2]}.csv
 	fi
-	if [ ! -f $DIRSQUADRE/$PLAYER4.csv ]; then
-		touch $DIRSQUADRE/$PLAYER4.csv
-		echo -e "Ruolo;Nome;Squadra;costo" > $DIRSQUADRE/$PLAYER4.csv
+	if [ ! -f $DIRSQUADRE/${PLAYER[3]}.csv ]; then
+		touch $DIRSQUADRE/${PLAYER[3]}.csv
+		echo -e "Ruolo;Nome;Squadra;costo" > $DIRSQUADRE/${PLAYER[3]}.csv
 	fi
-	if [ ! -f $DIRSQUADRE/$PLAYER5.csv ]; then
-		touch $DIRSQUADRE/$PLAYER5.csv
-		echo -e "Ruolo;Nome;Squadra;costo" > $DIRSQUADRE/$PLAYER5.csv
+	if [ ! -f $DIRSQUADRE/${PLAYER[4]}.csv ]; then
+		touch $DIRSQUADRE/${PLAYER[4]}.csv
+		echo -e "Ruolo;Nome;Squadra;costo" > $DIRSQUADRE/${PLAYER[4]}.csv
 	fi
-	if [ ! -f $DIRSQUADRE/$PLAYER6.csv ]; then
-		touch $DIRSQUADRE/$PLAYER6.csv
-		echo -e "Ruolo;Nome;Squadra;costo" > $DIRSQUADRE/$PLAYER6.csv
+	if [ ! -f $DIRSQUADRE/${PLAYER[5]}.csv ]; then
+		touch $DIRSQUADRE/${PLAYER[5]}.csv
+		echo -e "Ruolo;Nome;Squadra;costo" > $DIRSQUADRE/${PLAYER[5]}.csv
 	fi
 }
 
@@ -125,10 +127,11 @@ do
 		PORDISPONIBILI=$(cat $LISTA |cut -d ";" -f 1,5 |grep "P;0" |wc -l);
 		echo -e "-------------------------------------- \n"
 		echo -e "$CYAN""Portieri da chiamare:$NC $YELLOW$PORDISPONIBILI$NC"
-		PORPLAYER1=$(cat $DIRSQUADRE/$PLAYER1.csv |cut -d ";" -f 1 |grep "P" |wc -l);
-		if [ "$PORPLAYER1" -ge 1 ]; then
-			echo -e "$CYAN$PLAYER1$NC: $YELLOW$PORPLAYER1$NC \n"
-		fi
+		for i in "${PLAYER[@]}" 
+		do
+			BUYPLAYER=$(cat $DIRSQUADRE/$i.csv |cut -d ";" -f 1 |grep "P" |wc -l);
+			echo -e "$CYAN$i$NC: $YELLOW$BUYPLAYER$NC"
+		done
 		POS=$(echo $CASUAL | cut -d ";" -f 1)
 		NOME=$(echo $CASUAL | cut -d ";" -f 2)
 		SQUADRA=$(echo $CASUAL | cut -d ";" -f 3)
@@ -146,12 +149,18 @@ do
 	CASUAL=$(shuf -n 1 $LISTA);
 	if [[ "$CASUAL" == D* ]] && [[ "$CASUAL" == *0 ]]; then 
 		DIFDISPONIBILI=$(cat $LISTA |cut -d ";" -f 1,5 |grep "D;0" |wc -l);
-		echo -e "Difensori da chiamare: $YELLOW$DIFDISPONIBILI$NC"
+                echo -e "-------------------------------------- \n"
+                echo -e "$CYAN""Difensori da chiamare:$NC $YELLOW$DIFDISPONIBILI$NC"
+                for i in "${PLAYER[@]}"
+                do
+                        BUYPLAYER=$(cat $DIRSQUADRE/$i.csv |cut -d ";" -f 1 |grep "D" |wc -l);
+                        echo -e "$CYAN$i$NC: $YELLOW$BUYPLAYER$NC"
+                done
 		POS=$(echo $CASUAL | cut -d ";" -f 1)
 		NOME=$(echo $CASUAL | cut -d ";" -f 2)
 		SQUADRA=$(echo $CASUAL | cut -d ";" -f 3)
 		VAL=$(echo $CASUAL | cut -d ";" -f 4)
-		echo -e "Nome: $GREEN$NOME$NC, Ruolo: $CYAN$POS$NC, Squadra: $CYAN$SQUADRA$NC, Valutazione: $CYAN$VAL$NC"
+		echo -e "Nome: $GREEN$NOME$NC, Ruolo: $CYAN$POS$NC, Squadra: $CYAN$SQUADRA$NC, Valutazione: $CYAN$VAL$NC \n"
 		venduto
 	fi
 done
@@ -164,12 +173,18 @@ do
 	CASUAL=$(shuf -n 1 $LISTA);
 	if [[ "$CASUAL" == C* ]] && [[ "$CASUAL" == *0 ]]; then 
                 CENDISPONIBILI=$(cat $LISTA |cut -d ";" -f 1,5 |grep "C;0" |wc -l);
-                echo -e "Centrocampisti da chiamare: $YELLOW$CENDISPONIBILI$NC"
+                echo -e "-------------------------------------- \n"
+                echo -e "$CYAN""Centrocampisti da chiamare:$NC $YELLOW$CENDISPONIBILI$NC"
+                for i in "${PLAYER[@]}"
+                do
+                        BUYPLAYER=$(cat $DIRSQUADRE/$i.csv |cut -d ";" -f 1 |grep "C" |wc -l);
+                        echo -e "$CYAN$i$NC: $YELLOW$BUYPLAYER$NC"
+                done
 		POS=$(echo $CASUAL | cut -d ";" -f 1)
 		NOME=$(echo $CASUAL | cut -d ";" -f 2)
 		SQUADRA=$(echo $CASUAL | cut -d ";" -f 3)
 		VAL=$(echo $CASUAL | cut -d ";" -f 4)
-		echo -e "Nome: $GREEN$NOME$NC, Ruolo: $CYAN$POS$NC, Squadra: $CYAN$SQUADRA$NC, Valutazione: $CYAN$VAL$NC"
+		echo -e "Nome: $GREEN$NOME$NC, Ruolo: $CYAN$POS$NC, Squadra: $CYAN$SQUADRA$NC, Valutazione: $CYAN$VAL$NC \n"
 		venduto
 	fi
 done
@@ -183,12 +198,18 @@ do
 	CASUAL=$(shuf -n 1 $LISTA);
 	if [[ "$CASUAL" == A* ]] && [[ "$CASUAL" == *0 ]]; then 
 		ATTDISPONIBILI=$(cat $LISTA |cut -d ";" -f 1,5 |grep "A;0" |wc -l);
-		echo -e "Attaccanti da chiamare: $YELLOW$ATTDISPONIBILI$NC"
+		echo -e "-------------------------------------- \n"
+                echo -e "$CYAN""Attaccanti da chiamare:$NC $YELLOW$ATTDISPONIBILI$NC"
+                for i in "${PLAYER[@]}"
+                do
+                        BUYPLAYER=$(cat $DIRSQUADRE/$i.csv |cut -d ";" -f 1 |grep "A" |wc -l);
+                        echo -e "$CYAN$i$NC: $YELLOW$BUYPLAYER$NC"
+                done
 		POS=$(echo $CASUAL | cut -d ";" -f 1)
 		NOME=$(echo $CASUAL | cut -d ";" -f 2)
 		SQUADRA=$(echo $CASUAL | cut -d ";" -f 3)
 		VAL=$(echo $CASUAL | cut -d ";" -f 4)
-		echo -e "Nome: $GREEN$NOME$NC, Ruolo: $CYAN$POS$NC, Squadra: $CYAN$SQUADRA$NC, Valutazione: $CYAN$VAL$NC"
+		echo -e "Nome: $GREEN$NOME$NC, Ruolo: $CYAN$POS$NC, Squadra: $CYAN$SQUADRA$NC, Valutazione: $CYAN$VAL$NC \n"
 		venduto
 	fi
 done
@@ -201,7 +222,13 @@ do
         CASUAL=$(shuf -n 1 $LISTA);
         if [[ "$CASUAL" == *0 ]]; then
 		DISPONIBILI=$(cat $LISTA | cut -d ";" -f 5 |grep 0 |wc -l);
-                echo -e "Giocatori da chiamare: $YELLOW$DISPONIBILI$NC"
+		echo -e "-------------------------------------- \n"
+                echo -e "$CYAN""Giocatore da chiamare:$NC $YELLOW$DISPONIBILI$NC"
+                for i in "${PLAYER[@]}"
+                do
+                        BUYPLAYER=$(cat $DIRSQUADRE/$i.csv |cut -d ";" -f 1 |grep -E "P|D|C|A" |wc -l);
+                        echo -e "$CYAN$i$NC: $YELLOW$BUYPLAYER$NC"
+                done
                 POS=$(echo $CASUAL | cut -d ";" -f 1)
                 NOME=$(echo $CASUAL | cut -d ";" -f 2)
                 SQUADRA=$(echo $CASUAL | cut -d ";" -f 3)
@@ -219,12 +246,12 @@ function azzera_chiamate {
 	        case $AZZERA in
 			y|Y|Yes|yes|YES|Si|Sì|si|sì|s|S|SI)
 				sed -i -e "s/.$/0/g" $LISTA
-				rm -f $DIRSQUADRE/$PLAYER1.csv
-				rm -f $DIRSQUADRE/$PLAYER2.csv
-				rm -f $DIRSQUADRE/$PLAYER3.csv
-				rm -f $DIRSQUADRE/$PLAYER4.csv
-				rm -f $DIRSQUADRE/$PLAYER5.csv
-				rm -f $DIRSQUADRE/$PLAYER6.csv
+				rm -f $DIRSQUADRE/${PLAYER[0]}.csv
+				rm -f $DIRSQUADRE/${PLAYER[1]}.csv
+				rm -f $DIRSQUADRE/${PLAYER[2]}.csv
+				rm -f $DIRSQUADRE/${PLAYER[3]}.csv
+				rm -f $DIRSQUADRE/${PLAYER[4]}.csv
+				rm -f $DIRSQUADRE/${PLAYER[5]}.csv
 				cp $LISTAORIG $LISTA
 				;;
 			No|NO|N|n)
@@ -245,48 +272,48 @@ case $VENDUTO in
 
 	echo -e "Chi ha acquistato il giocatore?"
 	echo -e "(A)lfredo, (F)rancesco, (L)orenzo, (P)atrizio, (S)tefanoDP, StefanoDe(Z)i"
-	read  -${BASH_VERSION+e}r PLAYER
-	case $PLAYER in
+	read  -${BASH_VERSION+e}r ACQUISTO
+	case $ACQUISTO in
 		A|a)
 			echo -e "Per quanti Fantamilioni?"
 			read -${BASH_VERSION+e}r FM
-			echo -e "$GREEN$NOME$NC venduto a: $RED$PLAYER1$NC per $CYAN$FM$NC fantamilioni \n"
-			echo -e "$POS;$NOME;$SQUADRA;$FM" >> $DIRSQUADRE/$PLAYER1.csv
+			echo -e "$GREEN$NOME$NC venduto a: $RED${PLAYER[0]}$NC per $CYAN$FM$NC fantamilioni \n"
+			echo -e "$POS;$NOME;$SQUADRA;$FM" >> $DIRSQUADRE/${PLAYER[0]}.csv
  			sed -i "/$CASUAL/d" $LISTA
         		;;
 		F|f)
                         echo -e "Per quanti Fantamilioni?"
                         read -${BASH_VERSION+e}r FM
-                        echo -e "$GREEN$NOME$NC venduto a: $RED$PLAYER2$NC per $CYAN$FM$NC fantamilioni \n"
-        		echo -e "$POS;$NOME;$SQUADRA;$FM" >> $DIRSQUADRE/$PLAYER2.csv
+                        echo -e "$GREEN$NOME$NC venduto a: $RED${PLAYER[1]}$NC per $CYAN$FM$NC fantamilioni \n"
+        		echo -e "$POS;$NOME;$SQUADRA;$FM" >> $DIRSQUADRE/${PLAYER[1]}.csv
  			sed -i "/$CASUAL/d" $LISTA
 			;;
 		L|l)
                         echo -e "Per quanti Fantamilioni?"
                         read -${BASH_VERSION+e}r FM
-                        echo -e "$GREEN$NOME$NC venduto a: $RED$PLAYER3$NC per $CYAN$FM$NC fantamilioni \n"
-        		echo -e "$POS;$NOME;$SQUADRA;$FM" >> $DIRSQUADRE/$PLAYER3.csv
+                        echo -e "$GREEN$NOME$NC venduto a: $RED${PLAYER[2]}$NC per $CYAN$FM$NC fantamilioni \n"
+        		echo -e "$POS;$NOME;$SQUADRA;$FM" >> $DIRSQUADRE/${PLAYER[2]}.csv
  			sed -i "/$CASUAL/d" $LISTA
 			;;
 		P|p)
                         echo -e "Per quanti Fantamilioni?"
                         read -${BASH_VERSION+e}r FM
-                        echo -e "$GREEN$NOME$NC venduto a: $RED$PLAYER4$NC per $CYAN$FM$NC fantamilioni \n"
-        		echo -e "$POS;$NOME;$SQUADRA;$FM" >> $DIRSQUADRE/$PLAYER4.csv
+                        echo -e "$GREEN$NOME$NC venduto a: $RED${PLAYER[3]}$NC per $CYAN$FM$NC fantamilioni \n"
+        		echo -e "$POS;$NOME;$SQUADRA;$FM" >> $DIRSQUADRE/${PLAYER[3]}.csv
  			sed -i "/$CASUAL/d" $LISTA
 			;;
 		S|s)
                         echo -e "Per quanti Fantamilioni?"
                         read -${BASH_VERSION+e}r FM
-                        echo -e "$GREEN$NOME$NC venduto a: $RED$PLAYER5$NC per $CYAN$FM$NC fantamilioni \n"
-        		echo -e "$POS;$NOME;$SQUADRA;$FM" >> $DIRSQUADRE/$PLAYER5.csv
+                        echo -e "$GREEN$NOME$NC venduto a: $RED${PLAYER[4]}$NC per $CYAN$FM$NC fantamilioni \n"
+        		echo -e "$POS;$NOME;$SQUADRA;$FM" >> $DIRSQUADRE/${PLAYER[4]}.csv
  			sed -i "/$CASUAL/d" $LISTA
 			;;
 		Z|z)
                         echo -e "Per quanti Fantamilioni?"
                         read -${BASH_VERSION+e}r FM
-                        echo -e "$GREEN$NOME$NC venduto a: $RED$PLAYER6$NC per $CYAN$FM$NC fantamilioni \n"
-        		echo -e "$POS;$NOME;$SQUADRA;$FM" >> $DIRSQUADRE/$PLAYER6.csv
+                        echo -e "$GREEN$NOME$NC venduto a: $RED${PLAYER[5]}$NC per $CYAN$FM$NC fantamilioni \n"
+        		echo -e "$POS;$NOME;$SQUADRA;$FM" >> $DIRSQUADRE/${PLAYER[5]}.csv
  			sed -i "/$CASUAL/d" $LISTA
 			;;
 		*)
