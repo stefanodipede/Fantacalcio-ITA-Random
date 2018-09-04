@@ -14,7 +14,6 @@ OPTION="$1"
 DIRBACKUP="backup"
 DATA=$(date +%Y-%m-%d-%H:%M);
 DIRSQUADRE="squadre"
-NPLAYER=6
 PLAYER[0]="Alfredo";
 PLAYER[1]="Francesco";
 PLAYER[2]="Lorenzo";
@@ -275,46 +274,100 @@ case $VENDUTO in
 	read  -${BASH_VERSION+e}r ACQUISTO
 	case $ACQUISTO in
 		A|a)
-			echo -e "Per quanti Fantamilioni?"
-			read -${BASH_VERSION+e}r FM
-			echo -e "$GREEN$NOME$NC venduto a: $RED${PLAYER[0]}$NC per $CYAN$FM$NC fantamilioni \n"
-			echo -e "$POS;$NOME;$SQUADRA;$FM" >> $DIRSQUADRE/${PLAYER[0]}.csv
- 			sed -i "/$CASUAL/d" $LISTA
+			PORPLAYER=$(cat $DIRSQUADRE/${PLAYER[0]}.csv |cut -d ";" -f 1 |grep "P" |wc -l);
+			DIFPLAYER=$(cat $DIRSQUADRE/${PLAYER[0]}.csv |cut -d ";" -f 1 |grep "D" |wc -l);
+			CENPLAYER=$(cat $DIRSQUADRE/${PLAYER[0]}.csv |cut -d ";" -f 1 |grep "C" |wc -l);
+			ATTPLAYER=$(cat $DIRSQUADRE/${PLAYER[0]}.csv |cut -d ";" -f 1 |grep "A" |wc -l);
+			if ([[ "$POS" = "P" ]] && [[ "$PORPLAYER" -lt 3 ]]) || ([[ "$POS" = "D" ]] && [[ "$DIFPLAYER" -lt 8 ]]) || ([[ "$POS" = "C" ]] && [[ "$CENPLAYER" -lt 8 ]]) || ([[ "$POS" = "A" ]] && [[ "$ATTPLAYER" -lt 6 ]]); then
+				echo -e "Per quanti Fantamilioni?"
+				read -${BASH_VERSION+e}r FM
+				echo -e "$GREEN$NOME$NC venduto a: $CYAN${PLAYER[0]}$NC per $CYAN$FM$NC fantamilioni \n"
+				echo -e "$POS;$NOME;$SQUADRA;$FM" >> $DIRSQUADRE/${PLAYER[0]}.csv
+	 			sed -i "/$CASUAL/d" $LISTA
+			else
+				echo -e "$RED""ATTENZIONE:$NC $CYAN${PLAYER[0]}$NC $RED""ha raggiunto il limite massimo di acquisti per questo ruolo.$NC"
+				echo -e "Il giocatore $GREEN$NOME$NC è stato reinserito in lista \n"
+			fi
         		;;
 		F|f)
-                        echo -e "Per quanti Fantamilioni?"
-                        read -${BASH_VERSION+e}r FM
-                        echo -e "$GREEN$NOME$NC venduto a: $RED${PLAYER[1]}$NC per $CYAN$FM$NC fantamilioni \n"
-        		echo -e "$POS;$NOME;$SQUADRA;$FM" >> $DIRSQUADRE/${PLAYER[1]}.csv
- 			sed -i "/$CASUAL/d" $LISTA
+			PORPLAYER=$(cat $DIRSQUADRE/${PLAYER[1]}.csv |cut -d ";" -f 1 |grep "P" |wc -l);
+                        DIFPLAYER=$(cat $DIRSQUADRE/${PLAYER[1]}.csv |cut -d ";" -f 1 |grep "D" |wc -l);
+                        CENPLAYER=$(cat $DIRSQUADRE/${PLAYER[1]}.csv |cut -d ";" -f 1 |grep "C" |wc -l);
+                        ATTPLAYER=$(cat $DIRSQUADRE/${PLAYER[1]}.csv |cut -d ";" -f 1 |grep "A" |wc -l);
+                        if ([[ "$POS" = "P" ]] && [[ "$PORPLAYER" -lt 3 ]]) || ([[ "$POS" = "D" ]] && [[ "$DIFPLAYER" -lt 8 ]]) || ([[ "$POS" = "C" ]] && [[ "$CENPLAYER" -lt 8 ]]) || ([[ "$POS" = "A" ]] && [[ "$ATTPLAYER" -lt 6 ]]); then
+	                        echo -e "Per quanti Fantamilioni?"
+        	                read -${BASH_VERSION+e}r FM
+                	        echo -e "$GREEN$NOME$NC venduto a: $CYAN{PLAYER[1]}$NC per $CYAN$FM$NC fantamilioni \n"
+        			echo -e "$POS;$NOME;$SQUADRA;$FM" >> $DIRSQUADRE/${PLAYER[1]}.csv
+	 			sed -i "/$CASUAL/d" $LISTA
+                        else
+                                echo -e "$RED""ATTENZIONE:$NC $CYAN${PLAYER[1]}$NC $RED""ha raggiunto il limite massimo di acquisti per questo ruolo.$NC"
+                                echo -e "Il giocatore $GREEN$NOME$NC è stato reinserito in lista \n"
+                        fi
 			;;
 		L|l)
-                        echo -e "Per quanti Fantamilioni?"
-                        read -${BASH_VERSION+e}r FM
-                        echo -e "$GREEN$NOME$NC venduto a: $RED${PLAYER[2]}$NC per $CYAN$FM$NC fantamilioni \n"
-        		echo -e "$POS;$NOME;$SQUADRA;$FM" >> $DIRSQUADRE/${PLAYER[2]}.csv
- 			sed -i "/$CASUAL/d" $LISTA
+			PORPLAYER=$(cat $DIRSQUADRE/${PLAYER[2]}.csv |cut -d ";" -f 1 |grep "P" |wc -l);
+                        DIFPLAYER=$(cat $DIRSQUADRE/${PLAYER[2]}.csv |cut -d ";" -f 1 |grep "D" |wc -l);
+                        CENPLAYER=$(cat $DIRSQUADRE/${PLAYER[2]}.csv |cut -d ";" -f 1 |grep "C" |wc -l);
+                        ATTPLAYER=$(cat $DIRSQUADRE/${PLAYER[2]}.csv |cut -d ";" -f 1 |grep "A" |wc -l);
+                        if ([[ "$POS" = "P" ]] && [[ "$PORPLAYER" -lt 3 ]]) || ([[ "$POS" = "D" ]] && [[ "$DIFPLAYER" -lt 8 ]]) || ([[ "$POS" = "C" ]] && [[ "$CENPLAYER" -lt 8 ]]) || ([[ "$POS" = "A" ]] && [[ "$ATTPLAYER" -lt 6 ]]); then
+	                        echo -e "Per quanti Fantamilioni?"
+        	                read -${BASH_VERSION+e}r FM
+                	        echo -e "$GREEN$NOME$NC venduto a: $CYAN${PLAYER[2]}$NC per $CYAN$FM$NC fantamilioni \n"
+        			echo -e "$POS;$NOME;$SQUADRA;$FM" >> $DIRSQUADRE/${PLAYER[2]}.csv
+	 			sed -i "/$CASUAL/d" $LISTA
+                        else
+                                echo -e "$RED""ATTENZIONE:$NC $CYAN${PLAYER[2]}$NC $RED""ha raggiunto il limite massimo di acquisti per questo ruolo.$NC"
+                                echo -e "Il giocatore $GREEN$NOME$NC è stato reinserito in lista \n"
+                        fi
 			;;
 		P|p)
-                        echo -e "Per quanti Fantamilioni?"
-                        read -${BASH_VERSION+e}r FM
-                        echo -e "$GREEN$NOME$NC venduto a: $RED${PLAYER[3]}$NC per $CYAN$FM$NC fantamilioni \n"
-        		echo -e "$POS;$NOME;$SQUADRA;$FM" >> $DIRSQUADRE/${PLAYER[3]}.csv
- 			sed -i "/$CASUAL/d" $LISTA
+			PORPLAYER=$(cat $DIRSQUADRE/${PLAYER[3]}.csv |cut -d ";" -f 1 |grep "P" |wc -l);
+                        DIFPLAYER=$(cat $DIRSQUADRE/${PLAYER[3]}.csv |cut -d ";" -f 1 |grep "D" |wc -l);
+                        CENPLAYER=$(cat $DIRSQUADRE/${PLAYER[3]}.csv |cut -d ";" -f 1 |grep "C" |wc -l);
+                        ATTPLAYER=$(cat $DIRSQUADRE/${PLAYER[3]}.csv |cut -d ";" -f 1 |grep "A" |wc -l);
+                        if ([[ "$POS" = "P" ]] && [[ "$PORPLAYER" -lt 3 ]]) || ([[ "$POS" = "D" ]] && [[ "$DIFPLAYER" -lt 8 ]]) || ([[ "$POS" = "C" ]] && [[ "$CENPLAYER" -lt 8 ]]) || ([[ "$POS" = "A" ]] && [[ "$ATTPLAYER" -lt 6 ]]); then
+	                        echo -e "Per quanti Fantamilioni?"
+        	                read -${BASH_VERSION+e}r FM
+                	        echo -e "$GREEN$NOME$NC venduto a: $CYAN${PLAYER[3]}$NC per $CYAN$FM$NC fantamilioni \n"
+	        		echo -e "$POS;$NOME;$SQUADRA;$FM" >> $DIRSQUADRE/${PLAYER[3]}.csv
+ 				sed -i "/$CASUAL/d" $LISTA
+                        else
+                                echo -e "$RED""ATTENZIONE:$NC $CYAN${PLAYER[3]}$NC $RED""ha raggiunto il limite massimo di acquisti per questo ruolo.$NC"
+                                echo -e "Il giocatore $GREEN$NOME$NC è stato reinserito in lista \n"
+                        fi
 			;;
 		S|s)
-                        echo -e "Per quanti Fantamilioni?"
-                        read -${BASH_VERSION+e}r FM
-                        echo -e "$GREEN$NOME$NC venduto a: $RED${PLAYER[4]}$NC per $CYAN$FM$NC fantamilioni \n"
-        		echo -e "$POS;$NOME;$SQUADRA;$FM" >> $DIRSQUADRE/${PLAYER[4]}.csv
- 			sed -i "/$CASUAL/d" $LISTA
+                        PORPLAYER=$(cat $DIRSQUADRE/${PLAYER[4]}.csv |cut -d ";" -f 1 |grep "P" |wc -l);
+                        DIFPLAYER=$(cat $DIRSQUADRE/${PLAYER[4]}.csv |cut -d ";" -f 1 |grep "D" |wc -l);
+                        CENPLAYER=$(cat $DIRSQUADRE/${PLAYER[4]}.csv |cut -d ";" -f 1 |grep "C" |wc -l);
+                        ATTPLAYER=$(cat $DIRSQUADRE/${PLAYER[4]}.csv |cut -d ";" -f 1 |grep "A" |wc -l);
+                        if ([[ "$POS" = "P" ]] && [[ "$PORPLAYER" -lt 3 ]]) || ([[ "$POS" = "D" ]] && [[ "$DIFPLAYER" -lt 8 ]]) || ([[ "$POS" = "C" ]] && [[ "$CENPLAYER" -lt 8 ]]) || ([[ "$POS" = "A" ]] && [[ "$ATTPLAYER" -lt 6 ]]); then
+	                        echo -e "Per quanti Fantamilioni?"
+        	                read -${BASH_VERSION+e}r FM
+                	        echo -e "$GREEN$NOME$NC venduto a: $CYAN${PLAYER[4]}$NC per $CYAN$FM$NC fantamilioni \n"
+        			echo -e "$POS;$NOME;$SQUADRA;$FM" >> $DIRSQUADRE/${PLAYER[4]}.csv
+	 			sed -i "/$CASUAL/d" $LISTA
+                        else
+                                echo -e "$RED""ATTENZIONE:$NC $CYAN${PLAYER[4]}$NC $RED""ha raggiunto il limite massimo di acquisti per questo ruolo.$NC"
+                                echo -e "Il giocatore $GREEN$NOME$NC è stato reinserito in lista \n"
+                        fi
 			;;
 		Z|z)
-                        echo -e "Per quanti Fantamilioni?"
-                        read -${BASH_VERSION+e}r FM
-                        echo -e "$GREEN$NOME$NC venduto a: $RED${PLAYER[5]}$NC per $CYAN$FM$NC fantamilioni \n"
-        		echo -e "$POS;$NOME;$SQUADRA;$FM" >> $DIRSQUADRE/${PLAYER[5]}.csv
- 			sed -i "/$CASUAL/d" $LISTA
+                        PORPLAYER=$(cat $DIRSQUADRE/${PLAYER[5]}.csv |cut -d ";" -f 1 |grep "P" |wc -l);
+                        DIFPLAYER=$(cat $DIRSQUADRE/${PLAYER[5]}.csv |cut -d ";" -f 1 |grep "D" |wc -l);
+                        CENPLAYER=$(cat $DIRSQUADRE/${PLAYER[5]}.csv |cut -d ";" -f 1 |grep "C" |wc -l);
+                        ATTPLAYER=$(cat $DIRSQUADRE/${PLAYER[5]}.csv |cut -d ";" -f 1 |grep "A" |wc -l);
+                        if ([[ "$POS" = "P" ]] && [[ "$PORPLAYER" -lt 3 ]]) || ([[ "$POS" = "D" ]] && [[ "$DIFPLAYER" -lt 8 ]]) || ([[ "$POS" = "C" ]] && [[ "$CENPLAYER" -lt 8 ]]) || ([[ "$POS" = "A" ]] && [[ "$ATTPLAYER" -lt 6 ]]); then
+                        	echo -e "Per quanti Fantamilioni?"
+	                        read -${BASH_VERSION+e}r FM
+        	                echo -e "$GREEN$NOME$NC venduto a: $CYAN${PLAYER[5]}$NC per $CYAN$FM$NC fantamilioni \n"
+        			echo -e "$POS;$NOME;$SQUADRA;$FM" >> $DIRSQUADRE/${PLAYER[5]}.csv
+ 				sed -i "/$CASUAL/d" $LISTA
+                        else
+                                echo -e "$RED""ATTENZIONE:$NC $CYAN${PLAYER[5]}$NC $RED""ha raggiunto il limite massimo di acquisti per questo ruolo.$NC"
+                                echo -e "Il giocatore $GREEN$NOME$NC è stato reinserito in lista \n"
+                        fi
 			;;
 		*)
                         echo -e "Scelta non valida. Rimetto $NOME sul mercato. \n"
@@ -330,13 +383,6 @@ case $VENDUTO in
         echo -e "Scelta non valida. Vado avanti \n"
 esac
 }
-
-#function asta {
-#until [ "$DISPONIBILI" -lt 1 ]; do
-#	echo $DISPONIBILI
-#	portieri
-#done
-#}
 
 
 inizio
