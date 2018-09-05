@@ -119,7 +119,7 @@ function inizio {
 #Portieri
 function portieri {
 
-while [ $PORDISPONIBILI -gt 1 ]
+while [ $PORDISPONIBILI -gt 1 ] 
 do
 	CASUAL=$(shuf -n 1 $LISTA);
 	if [[ "$CASUAL" == P* ]] && [[ "$CASUAL" == *0 ]]; then 
@@ -139,6 +139,25 @@ do
 		venduto
 	fi
 done
+echo -e "I Portieri sono stati tutti chiamati."
+echo -e "Rileggo i (P)ortieri non venduti o vado avanti con i (D)ifensori?"
+read -${BASH_VERSION+e}r FINITI
+case $FINITI in
+    P|p)
+        echo -e "Ricomincio con i portieri:"
+	cat $LISTA |cut -d ";" -f 1,5 |grep "P;1" |sed -i -e "s/.$/0/g" $LISTA
+	PORDISPONIBILI=$(cat $LISTA |cut -d ";" -f 1,5 |grep "P;0" |wc -l);
+	portieri 
+	;;
+    D|d)
+        echo -e "Vado avanti con i Difensori."
+	difensori
+	;;
+      *)
+	echo -e "Scelta non valida. Esco"
+	exit 1
+	;;
+esac
 }
 
 #Difensori
@@ -163,6 +182,25 @@ do
 		venduto
 	fi
 done
+echo -e "I Difensori sono stati tutti chiamati."
+echo -e "Rileggo i (D)ifensori non venduti o vado avanti con i (C)entrocampisti?"
+read -${BASH_VERSION+e}r FINITI
+case $FINITI in
+    D|d)
+        echo -e "Ricomincio con i difensori:"
+        cat $LISTA |cut -d ";" -f 1,5 |grep "D;1" |sed -i -e "s/.$/0/g" $LISTA
+        DIFDISPONIBILI=$(cat $LISTA |cut -d ";" -f 1,5 |grep "D;0" |wc -l);
+        difensori
+        ;;
+    C|c)
+        echo -e "Vado avanti con i Centrocampisti."
+        centrocampisti
+        ;;
+      *)
+        echo -e "Scelta non valida. Esco"
+        exit 1
+	;;
+esac
 }
 
 #Centrocampisti
@@ -187,6 +225,25 @@ do
 		venduto
 	fi
 done
+echo -e "I Centrocampisti sono stati tutti chiamati."
+echo -e "Rileggo i (C)centrocampisti non venduti o vado avanti con gli (A)ttaccanti?"
+read -${BASH_VERSION+e}r FINITI
+case $FINITI in
+    C|c)
+        echo -e "Ricomincio con i centrocampisti:"
+        cat $LISTA |cut -d ";" -f 1,5 |grep "C;1" |sed -i -e "s/.$/0/g" $LISTA
+        CENDISPONIBILI=$(cat $LISTA |cut -d ";" -f 1,5 |grep "C;0" |wc -l);
+        centrocampisti
+        ;;
+    C|c)
+        echo -e "Vado avanti con gli attaccanti."
+        attaccanti
+        ;;
+      *)
+        echo -e "Scelta non valida. Esco"
+        exit 1
+	;;
+esac
 }
 
 
@@ -212,6 +269,29 @@ do
 		venduto
 	fi
 done
+echo -e "Gli Attaccanti sono stati tutti chiamati."
+echo -e "Rileggo gli (A)ttaccanti non venduti, oppure ricomincio dai (P)ortieri oppure (E)sco?"
+read -${BASH_VERSION+e}r FINITI
+case $FINITI in
+    A|a)
+        echo -e "Ricomincio con gli Attaccanti:"
+        cat $LISTA |cut -d ";" -f 1,5 |grep "A;1" |sed -i -e "s/.$/0/g" $LISTA
+        ATTDISPONIBILI=$(cat $LISTA |cut -d ";" -f 1,5 |grep "A;0" |wc -l);
+        attaccanti
+        ;;
+    P|c)
+        echo -e "Vado avanti con i Portieri."
+        portieri
+        ;;
+    E|e)
+	echo -e "Asta finita. Buon divertimento!"
+	exit 1
+	;;
+      *)
+        echo -e "Scelta non valida. Esco"
+        exit 1
+	;;
+esac
 }
 
 #Tutti i ruoli
@@ -236,6 +316,25 @@ do
                 venduto
 	fi
 done
+echo -e "I Giocatori sono stati tutti chiamati."
+echo -e "Rileggo da capo i (G)iocatori non venduti oppure (E)sco?"
+read -${BASH_VERSION+e}r FINITI
+case $FINITI in
+    G|g)
+        echo -e "Ricomincio con i giocatori:"
+        cat $LISTA |cut -d ";" -f 5 |grep "1" |sed -i -e "s/.$/0/g" $LISTA
+        DISPONIBILI=$(cat $LISTA |cut -d ";" -f 5 |grep "0" |wc -l);
+        qualsiasi
+        ;;
+    E|e)
+        echo -e "Asta finita. Buon divertimento."
+        exit 1
+        ;;
+      *)
+        echo -e "Scelta non valida. Esco"
+        exit 1
+	;;
+esac
 }
 
 
