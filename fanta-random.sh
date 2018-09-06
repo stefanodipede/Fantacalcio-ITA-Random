@@ -12,7 +12,7 @@ DISPONIBILI=$(cat $LISTA | cut -d ";" -f 5 |grep 0 |wc -l);
 PORDISPONIBILI=$(cat $LISTA |cut -d ";" -f 1,5 |grep "P;0" |wc -l);
 OPTION="$1"
 DIRBACKUP="backup"
-DATA=$(date +%Y-%m-%d-%H:%M);
+DATA=$(date +%Y-%m-%d--%H-%M);
 DIRSQUADRE="squadre"
 PLAYER[0]="Alfredo";
 PLAYER[1]="Francesco";
@@ -87,33 +87,19 @@ function inizio {
 	if [ ! -d "$DIRSQUADRE" ]; then
 		mkdir $DIRSQUADRE
 	fi
-	cp $LISTA $DIRBACKUP/$LISTA-backup-$DATA
+	cp $LISTA $DIRBACKUP/Backup-Lista-$DATA-$LISTA
 	sed -i -e "s/ \*//g" $LISTA
 	sed -i -e "s/'//g" $LISTA
-	if [ ! -f $DIRSQUADRE/${PLAYER[0]}.csv ]; then
-		touch $DIRSQUADRE/${PLAYER[0]}.csv
-		echo -e "Ruolo;Nome;Squadra;costo" > $DIRSQUADRE/${PLAYER[0]}.csv
-	fi
-	if [ ! -f $DIRSQUADRE/${PLAYER[1]}.csv ]; then
-		touch $DIRSQUADRE/${PLAYER[1]}.csv
-		echo -e "Ruolo;Nome;Squadra;costo" > $DIRSQUADRE/${PLAYER[1]}.csv
-	fi
-	if [ ! -f $DIRSQUADRE/${PLAYER[2]}.csv ]; then
-		touch $DIRSQUADRE/${PLAYER[2]}.csv
-		echo -e "Ruolo;Nome;Squadra;costo" > $DIRSQUADRE/${PLAYER[2]}.csv
-	fi
-	if [ ! -f $DIRSQUADRE/${PLAYER[3]}.csv ]; then
-		touch $DIRSQUADRE/${PLAYER[3]}.csv
-		echo -e "Ruolo;Nome;Squadra;costo" > $DIRSQUADRE/${PLAYER[3]}.csv
-	fi
-	if [ ! -f $DIRSQUADRE/${PLAYER[4]}.csv ]; then
-		touch $DIRSQUADRE/${PLAYER[4]}.csv
-		echo -e "Ruolo;Nome;Squadra;costo" > $DIRSQUADRE/${PLAYER[4]}.csv
-	fi
-	if [ ! -f $DIRSQUADRE/${PLAYER[5]}.csv ]; then
-		touch $DIRSQUADRE/${PLAYER[5]}.csv
-		echo -e "Ruolo;Nome;Squadra;costo" > $DIRSQUADRE/${PLAYER[5]}.csv
-	fi
+
+	for i in "${PLAYER[@]}"
+	do
+		if [ ! -f $DIRSQUADRE/$i.csv ]; then
+			touch $DIRSQUADRE/$i.csv
+			echo -e "Ruolo;Nome;Squadra;costo" > $DIRSQUADRE/$i.csv
+		else
+			cp $DIRSQUADRE/$i.csv $DIRBACKUP/Backup-Squadra-$DATA-$i.csv
+		fi
+	done
 }
 
 #Portieri
@@ -344,12 +330,10 @@ function azzera_chiamate {
 	        case $AZZERA in
 			y|Y|Yes|yes|YES|Si|Sì|si|sì|s|S|SI)
 				sed -i -e "s/.$/0/g" $LISTA
-				rm -f $DIRSQUADRE/${PLAYER[0]}.csv
-				rm -f $DIRSQUADRE/${PLAYER[1]}.csv
-				rm -f $DIRSQUADRE/${PLAYER[2]}.csv
-				rm -f $DIRSQUADRE/${PLAYER[3]}.csv
-				rm -f $DIRSQUADRE/${PLAYER[4]}.csv
-				rm -f $DIRSQUADRE/${PLAYER[5]}.csv
+			        for i in "${PLAYER[@]}"
+		        	do				
+					rm -f $DIRSQUADRE/$i.csv
+				done
 				cp $LISTAORIG $LISTA
 				;;
 			No|NO|N|n)
